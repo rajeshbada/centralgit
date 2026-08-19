@@ -1,0 +1,36 @@
+leapp upgrade --target 9.4
+subscription-manager register --org="Default_Organization" --activationkey="RHELMig_8to9" --force
+subscription-manager identity
+subscription-manager release --list
+subscription-manager release --show
+ip r
+shutdown
+subscription-manager identity
+yum install leapp-upgrade
+cd /opt
+ll
+sudo service falcon-sensor stop
+ll
+rm -rf /opt/falcon-sensor
+sudo yum -y remove falcon-sensor
+systemctl daemon-reload
+sudo service falcon-sensor status
+subscription-manager release --unset
+leapp preupgrade --target 9.4
+cat /var/log/leapp/leapp-report.txt
+sed -i s/^AllowZoneDrifting=.*/AllowZoneDrifting=no/ /etc/firewalld/firewalld.conf
+leapp preupgrade --target 9.4
+leapp upgrade --target 9.4
+/var/log/leapp/leapp-report.txt
+less /var/log/leapp/leapp-report.txt
+rpm -qa | grep linux-firmware
+dnf remove linux-firmware -y
+dnf clean all
+rm -rf /var/cache/dnf
+dnf distro-sync -y
+leapp preupgrade --target 9.4
+leapp upgrade --target 9.4
+ll /boot -lsrt
+sudo systemctl is-system-running
+systemctl --failed
+Reboot
