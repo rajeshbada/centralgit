@@ -1,0 +1,33 @@
+NFS SERVER 
+Install NFS Utilities
+sudo dnf install nfs-utils -y
+
+sudo mkdir -p /mnt/share
+sudo chown nobody:nobody /mnt/share
+sudo chmod 777 /mnt/share
+
+/mnt/share 192.168.1.20(rw,sync,no_root_squash,no_subtree_check)
+
+sudo exportfs -ra
+
+sudo systemctl enable --now nfs-server
+sudo systemctl restart nfs-server
+
+sudo firewall-cmd --reload
+sudo firewall-cmd --permanent --add-service=nfs
+
+NFS CLIENT
+sudo dnf install nfs-utils -y
+
+sudo mkdir -p /mnt/nfs_share
+
+sudo mount 192.168.1.10:/mnt/share /mnt/nfs_share
+
+192.168.1.10:/mnt/share  /mnt/nfs_share  nfs  defaults  0  0
+
+If it says "device is busy", try:
+sudo umount -l /sapmnt      # Lazy unmount
+sudo fuser -vm /sapmnt
+sudo umount -f /sapmnt      # Force unmount (for NFS, if hung)
+
+
